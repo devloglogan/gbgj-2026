@@ -236,7 +236,7 @@ function pd.update()
 			updateMirroredTiles(tiles[1 + column], tiles[1 + column + 12])
 		end
 	end
-
-	-- Top bar
-	gfx.fillRect(0, 0, 400, 30)
 end
+
+
+import("topBar")

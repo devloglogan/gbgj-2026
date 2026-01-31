@@ -19,7 +19,7 @@ end
 function ScrollText:init(text, isSecond)
     self.offset = 0
     self.width = 0
-    self.scrollSpeed = 10
+    self.scrollSpeed = 1
     self:updateText(text)
 
     if self.width > pd.display.getWidth() then
@@ -39,7 +39,7 @@ function ScrollText:init(text, isSecond)
     if self.width > pd.display.getWidth() then
         self.resetPos = self.resetPos - pd.display.getWidth()
     end
-    self:moveTo(startPos, yPos)
+    self:moveTo(startPos, yPos, -1)
 end
 
 function ScrollText:update()
