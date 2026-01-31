@@ -181,6 +181,14 @@ function pd.update()
 	tilesToMove[5] = mirroredStartTile
 	tilesToMove[6] = mirroredEndTile
 
+	-- Darken all tiles then lighten selected tiles
+	for i = 1, 16 do
+		tiles[i]:darken()
+	end
+	for i = 1, 6 do
+		tilesToMove[i]:lighten()
+	end
+
 	-- Move tiles on crank change
 	local crankChange = pd.getCrankChange()
 	for i = 1, 6 do
