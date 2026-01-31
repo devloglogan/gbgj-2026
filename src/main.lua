@@ -76,6 +76,11 @@ local function rearrangeRow(rowIndex, direction)
 	local rowStart = 1 + (rowIndex * 4)
 	local rowTiles = {}
 
+	-- Get current offset before rearranging
+	local firstTile = tiles[rowStart]
+	local currentX = firstTile:getPosition()
+	local offset = currentX - firstTile.homeX
+
 	for i = 0, 3 do
 		rowTiles[i] = tiles[rowStart + i]
 	end
@@ -94,15 +99,25 @@ local function rearrangeRow(rowIndex, direction)
 		tiles[rowStart + 3] = rowTiles[0]
 	end
 
+	-- Update home positions
 	for i = 0, 3 do
 		local t = tiles[rowStart + i]
 		t.homeX = 50 + (tileWidth / 2) + (i * tileWidth)
-		t:moveTo(t.homeX, t.homeY)
 	end
+
+	-- Only move the wrapping tile to the opposite side
+	local wrapIndex = direction > 0 and 0 or 3
+	local wrapTile = tiles[rowStart + wrapIndex]
+	wrapTile:moveTo(wrapTile.homeX + offset - (direction * tileWidth), wrapTile.homeY)
 end
 
 local function rearrangeColumn(colIndex, direction)
 	local colTiles = {}
+
+	-- Get current offset before rearranging
+	local firstTile = tiles[colIndex + 1]
+	local _, currentY = firstTile:getPosition()
+	local offset = currentY - firstTile.homeY
 
 	for i = 0, 3 do
 		colTiles[i] = tiles[colIndex + 1 + (i * 4)]
@@ -122,11 +137,16 @@ local function rearrangeColumn(colIndex, direction)
 		tiles[colIndex + 1 + 12] = colTiles[0]
 	end
 
+	-- Update home positions
 	for i = 0, 3 do
 		local t = tiles[colIndex + 1 + (i * 4)]
 		t.homeY = -15 + (i * tileWidth) + (tileWidth / 2)
-		t:moveTo(t.homeX, t.homeY)
 	end
+
+	-- Only move the wrapping tile to the opposite side
+	local wrapIndex = direction > 0 and 0 or 3
+	local wrapTile = tiles[colIndex + 1 + (wrapIndex * 4)]
+	wrapTile:moveTo(wrapTile.homeX, wrapTile.homeY + offset - (direction * tileWidth))
 end
 
 function pd.update()
@@ -209,10 +229,10 @@ function pd.update()
 		local startTile = tiles[1 + (row * 4)]
 		local currentX = startTile:getPosition()
 		local offset = currentX - startTile.homeX
-		if offset >= tileWidth then
+		if offset >= tileWidth / 2 then
 			rearrangeRow(row, 1)
 			updateMirroredTiles(tiles[1 + (row * 4)], tiles[4 + (row * 4)])
-		elseif offset <= -tileWidth then
+		elseif offset <= -tileWidth / 2 then
 			rearrangeRow(row, -1)
 			updateMirroredTiles(tiles[1 + (row * 4)], tiles[4 + (row * 4)])
 		end
@@ -220,10 +240,10 @@ function pd.update()
 		local startTile = tiles[1 + column]
 		local _, currentY = startTile:getPosition()
 		local offset = currentY - startTile.homeY
-		if offset >= tileWidth then
+		if offset >= tileWidth / 2 then
 			rearrangeColumn(column, 1)
 			updateMirroredTiles(tiles[1 + column], tiles[1 + column + 12])
-		elseif offset <= -tileWidth then
+		elseif offset <= -tileWidth / 2 then
 			rearrangeColumn(column, -1)
 			updateMirroredTiles(tiles[1 + column], tiles[1 + column + 12])
 		end
