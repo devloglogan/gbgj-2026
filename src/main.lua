@@ -54,19 +54,43 @@ end
 initPerlinRectangles()
 initClassTiles()
 
--- Extra Tiles
-local x, y = tiles[4]:getPosition()
-x -= 300
-local extraTile1 = Tile(x, y, tileWidth, tiles[4]:getImage())
-extraTile1:add()
-x, y = tiles[1]:getPosition()
-x += 300
-local extraTile2 = Tile(x, y, tileWidth, tiles[1]:getImage())
-extraTile2:add()
-
 local row = 0
 local column = 0
 local isVertical = false
+
+local mirroredStartTile = Tile(0, 0, tileWidth, tiles[1]:getImage())
+mirroredStartTile:add()
+local mirroredEndTile = Tile(0, 0, tileWidth, tiles[1]:getImage())
+mirroredEndTile:add()
+
+local function updateMirroredTiles(startTile, endTile)
+	mirroredEndTile:setImage(endTile:getImage())
+	x, y = endTile:getPosition()
+	if isVertical then
+		y -= 300
+	else
+		x -= 300
+	end
+	mirroredEndTile:moveTo(x, y)
+	mirroredStartTile:setImage(startTile:getImage())
+	x, y = startTile:getPosition()
+	if isVertical then
+		y += 300
+	else
+		x += 300
+	end
+	mirroredStartTile:moveTo(x, y)
+end
+
+local function updateAxis(isCurrentVertical, isTargetVertical, delta)
+	if isCurrentVertical == isTargetVertical then
+		return isTargetVertical, delta
+	else
+		return isTargetVertical, 0
+	end
+end
+
+updateMirroredTiles(tiles[1], tiles[4])
 
 function pd.update()
 	-- gfx.clear()
@@ -75,55 +99,33 @@ function pd.update()
 	pd.timer.updateTimers()
 
 	-- Determine row/column
-	local extraTilesDirty = false
+	local delta
 	if pd.buttonJustPressed(pd.kButtonDown) then
-		if isVertical then
-			isVertical = false
-		else
-			row += 1
-		end
-		extraTilesDirty = true
+		isVertical, delta = updateAxis(isVertical, false, 1)
+		row += delta
 	elseif pd.buttonJustPressed(pd.kButtonUp) then
-		if isVertical then
-			isVertical = false
-		else
-			row -= 1
-		end
-		extraTilesDirty = true
+		isVertical, delta = updateAxis(isVertical, false, -1)
+		row += delta
 	elseif pd.buttonJustPressed(pd.kButtonLeft) then
-		if not isVertical then
-			isVertical = true
-		else
-			column -= 1
-		end
-		extraTilesDirty = true
+		isVertical, delta = updateAxis(isVertical, true, -1)
+		column += delta
 	elseif pd.buttonJustPressed(pd.kButtonRight) then
-		if not isVertical then
-			isVertical = true
-		else
-			column += 1
-		end
-		extraTilesDirty = true
+		isVertical, delta = updateAxis(isVertical, true, 1)
+		column += delta
 	end
 	row = row % 4
 	column = column % 4
 
-	-- Update extra tiles on changed row/column
+	-- Update mirrored tiles on changed row/column
+	local extraTilesDirty = pd.buttonJustPressed(pd.kButtonDown)
+		or pd.buttonJustPressed(pd.kButtonUp)
+		or pd.buttonJustPressed(pd.kButtonLeft)
+		or pd.buttonJustPressed(pd.kButtonRight)
 	if extraTilesDirty then
-		if not isVertical then
-			extraTile1:setImage(tiles[4 + (row * 4)]:getImage())
-			x, y = tiles[4 + (row * 4)]:getPosition()
-			extraTile1:moveTo(x - 300, y)
-			extraTile2:setImage(tiles[1 + (row * 4)]:getImage())
-			x, y = tiles[1 + (row * 4)]:getPosition()
-			extraTile2:moveTo(x + 300, y)
+		if isVertical then
+			updateMirroredTiles(tiles[1 + column], tiles[1 + column + 12])
 		else
-			extraTile1:setImage(tiles[column + (4 * (4 - 1)) + 1]:getImage())
-			x, y = tiles[column + (4 * (4 - 1)) + 1]:getPosition()
-			extraTile1:moveTo(x, y - 300)
-			extraTile2:setImage(tiles[column + (4 * (1 - 1)) + 1]:getImage())
-			x, y = tiles[column + (4 * (1 - 1)) + 1]:getPosition()
-			extraTile2:moveTo(x, y + 300)
+			updateMirroredTiles(tiles[1 + (row * 4)], tiles[4 + (row * 4)])
 		end
 	end
 
@@ -138,8 +140,8 @@ function pd.update()
 			tilesToMove[i] = tiles[column + (4 * (i - 1)) + 1]
 		end
 	end
-	tilesToMove[5] = extraTile1
-	tilesToMove[6] = extraTile2
+	tilesToMove[5] = mirroredStartTile
+	tilesToMove[6] = mirroredEndTile
 
 	-- Move tiles on crank change
 	local crankChange = pd.getCrankChange()
