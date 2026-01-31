@@ -10,30 +10,24 @@ local gfx = playdate.graphics
 
 local tileWidth = 75
 
-local noiseImages = {}
--- 16 perlin rectangles
-local function initPerlinRectangles()
-	for i = 1, 16 do
-		local img = gfx.image.new(tileWidth, tileWidth)
-		gfx.pushContext(img)
-
-		local zOffset = i * 10
-		for x = 0, tileWidth - 1 do
-			for y = 0, tileWidth - 1 do
-				local noiseVal = gfx.perlin(x * 0.05, y * 0.05, zOffset)
-				if noiseVal > 0.5 then
-					gfx.setColor(gfx.kColorWhite)
-				else
-					gfx.setColor(gfx.kColorBlack)
-				end
-				gfx.drawPixel(x, y)
-			end
-		end
-
-		gfx.popContext()
-		noiseImages[i] = img
-	end
-end
+local tileImages = {
+	gfx.image.new("images/dissapointed/Dissapointed_LB.png"),
+	gfx.image.new("images/dissapointed/Dissapointed_LT.png"),
+	gfx.image.new("images/dissapointed/Dissapointed_RB.png"),
+	gfx.image.new("images/dissapointed/Dissapointed_RT.png"),
+	gfx.image.new("images/dissapointed/Dissapointed_LB.png"),
+	gfx.image.new("images/dissapointed/Dissapointed_LT.png"),
+	gfx.image.new("images/dissapointed/Dissapointed_RB.png"),
+	gfx.image.new("images/dissapointed/Dissapointed_RT.png"),
+	gfx.image.new("images/dissapointed/Dissapointed_LB.png"),
+	gfx.image.new("images/dissapointed/Dissapointed_LT.png"),
+	gfx.image.new("images/dissapointed/Dissapointed_RB.png"),
+	gfx.image.new("images/dissapointed/Dissapointed_RT.png"),
+	gfx.image.new("images/dissapointed/Dissapointed_LB.png"),
+	gfx.image.new("images/dissapointed/Dissapointed_LT.png"),
+	gfx.image.new("images/dissapointed/Dissapointed_RB.png"),
+	gfx.image.new("images/dissapointed/Dissapointed_RT.png"),
+}
 
 local tiles = {}
 local function initClassTiles()
@@ -44,14 +38,13 @@ local function initClassTiles()
 				50 + (tileWidth / 2) + (i * tileWidth),
 				-15 + (j * tileWidth) + (tileWidth / 2),
 				tileWidth,
-				noiseImages[index]
+				tileImages[index]
 			)
 			tiles[index]:add()
 		end
 	end
 end
 
-initPerlinRectangles()
 initClassTiles()
 
 local row = 0
@@ -184,6 +177,10 @@ function pd.update()
 		else
 			updateMirroredTiles(tiles[1 + (row * 4)], tiles[4 + (row * 4)])
 		end
+
+		for i = 1, 16 do
+			tiles[i]:moveTo(tiles[i].homeX, tiles[i].homeY)
+		end
 	end
 
 	-- Select tiles to move
@@ -237,6 +234,5 @@ function pd.update()
 		end
 	end
 end
-
 
 import("topBar")
