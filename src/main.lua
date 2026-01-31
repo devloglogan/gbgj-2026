@@ -5,6 +5,7 @@ import("CoreLibs/object.lua")
 
 import("tile")
 import("levelLoader")
+import("topBar")
 
 local pd = playdate
 local gfx = playdate.graphics
@@ -227,4 +228,5 @@ function pd.update()
 	end
 end
 
-import("topBar")
+SetLevelData(1)
+DrawTopBar()

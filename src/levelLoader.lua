@@ -1,6 +1,6 @@
 local pd = playdate
 local gfx = playdate.graphics
-LevelX = 
+local levelX = 
 {
     text = "This is the line of dialogue",
     bg = "images/bg1",
@@ -32,10 +32,10 @@ LevelX =
     }
 }
 
-Level1 = 
+local level1 = 
 {
     text = "This is the line of dialogue",
-    bg = "images/bg1",
+    bg = "images/bgs/party",
     winState = 
     {
         "face1",
@@ -64,17 +64,44 @@ Level1 =
     }
 }
 
-function GetTileImages(levelNum)
-    local level
-    local tiles = {}
+local function getLevel(levelNum)
     if levelNum == 1 then
-        level = Level1
+        return level1
     end
+end
 
+
+function GetTileImages(levelNum)
+    local level = getLevel(levelNum)
+    local tiles = {}
     for i = 1, 16 do
         local foo = level.tiles[i]
         local image = gfx.image.new(foo)
         tiles[i] = image
     end
     return tiles
+end
+
+local bgSprite
+local function setBg(levelNum)
+    local image = gfx.image.new(getLevel(levelNum).bg)
+
+    if bgSprite == nil then
+        bgSprite = gfx.sprite.new(image)
+        bgSprite:moveTo(pd.display.getWidth()/2, pd.display.getHeight()/2)
+        bgSprite:add()
+    else
+        bgSprite:setImage(image)
+    end
+end
+    
+local function setLevelText(levelNum)
+    local level = getLevel(levelNum)
+    local text = level.text;
+    SetTopText(text)
+end
+
+function SetLevelData(levelNum)
+    setBg(levelNum)
+    setLevelText(levelNum)
 end
