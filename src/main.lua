@@ -151,23 +151,6 @@ function pd.update()
 	row = row % 4
 	column = column % 4
 
-	-- Update mirrored tiles on changed row/column
-	local extraTilesDirty = pd.buttonJustPressed(pd.kButtonDown)
-		or pd.buttonJustPressed(pd.kButtonUp)
-		or pd.buttonJustPressed(pd.kButtonLeft)
-		or pd.buttonJustPressed(pd.kButtonRight)
-	if extraTilesDirty then
-		if isVertical then
-			updateMirroredTiles(tiles[1 + column], tiles[1 + column + 12])
-		else
-			updateMirroredTiles(tiles[1 + (row * 4)], tiles[4 + (row * 4)])
-		end
-
-		for i = 1, 16 do
-			tiles[i]:moveTo(tiles[i].homeX, tiles[i].homeY)
-		end
-	end
-
 	-- Select tiles to move
 	local tilesToMove = {}
 	if not isVertical then
@@ -186,7 +169,7 @@ function pd.update()
 	for i = 1, 16 do
 		tiles[i]:darken()
 	end
-	for i = 1, 6 do
+	for i = 1, 4 do
 		tilesToMove[i]:lighten()
 	end
 
@@ -200,6 +183,23 @@ function pd.update()
 			y += crankChange / 4
 		end
 		tilesToMove[i]:moveTo(x, y)
+	end
+
+	-- Update mirrored tiles on changed row/column
+	local extraTilesDirty = pd.buttonJustPressed(pd.kButtonDown)
+		or pd.buttonJustPressed(pd.kButtonUp)
+		or pd.buttonJustPressed(pd.kButtonLeft)
+		or pd.buttonJustPressed(pd.kButtonRight)
+	if extraTilesDirty then
+		if isVertical then
+			updateMirroredTiles(tiles[1 + column], tiles[1 + column + 12])
+		else
+			updateMirroredTiles(tiles[1 + (row * 4)], tiles[4 + (row * 4)])
+		end
+
+		for i = 1, 16 do
+			tiles[i]:moveTo(tiles[i].homeX, tiles[i].homeY)
+		end
 	end
 
 	-- Check if tiles moved far enough to rearrange indices
