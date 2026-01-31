@@ -4,30 +4,14 @@ import("CoreLibs/sprites.lua")
 import("CoreLibs/object.lua")
 
 import("tile")
+import("levelLoader")
 
 local pd = playdate
 local gfx = playdate.graphics
 
 local tileWidth = 75
 
-local tileImages = {
-	gfx.image.new("images/dissapointed/Dissapointed_LB.png"),
-	gfx.image.new("images/dissapointed/Dissapointed_LT.png"),
-	gfx.image.new("images/dissapointed/Dissapointed_RB.png"),
-	gfx.image.new("images/dissapointed/Dissapointed_RT.png"),
-	gfx.image.new("images/dissapointed/Dissapointed_LB.png"),
-	gfx.image.new("images/dissapointed/Dissapointed_LT.png"),
-	gfx.image.new("images/dissapointed/Dissapointed_RB.png"),
-	gfx.image.new("images/dissapointed/Dissapointed_RT.png"),
-	gfx.image.new("images/dissapointed/Dissapointed_LB.png"),
-	gfx.image.new("images/dissapointed/Dissapointed_LT.png"),
-	gfx.image.new("images/dissapointed/Dissapointed_RB.png"),
-	gfx.image.new("images/dissapointed/Dissapointed_RT.png"),
-	gfx.image.new("images/dissapointed/Dissapointed_LB.png"),
-	gfx.image.new("images/dissapointed/Dissapointed_LT.png"),
-	gfx.image.new("images/dissapointed/Dissapointed_RB.png"),
-	gfx.image.new("images/dissapointed/Dissapointed_RT.png"),
-}
+local tileImages = GetTileImages(1)
 
 local tiles = {}
 local function initClassTiles()
