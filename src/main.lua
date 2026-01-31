@@ -13,6 +13,7 @@ local gfx = playdate.graphics
 local tileWidth = 75
 
 local tileImages = GetTileImages(1)
+local tileIds = GetTileIds(1)
 
 local tiles = {}
 local function initClassTiles()
@@ -23,7 +24,8 @@ local function initClassTiles()
 				50 + (tileWidth / 2) + (i * tileWidth),
 				-15 + (j * tileWidth) + (tileWidth / 2),
 				tileWidth,
-				tileImages[index]
+				tileImages[index],
+				tileIds[index]
 			)
 			tiles[index]:add()
 		end
@@ -225,6 +227,9 @@ function pd.update()
 			rearrangeColumn(column, -1)
 			updateMirroredTiles(tiles[1 + column], tiles[1 + column + 12])
 		end
+	end
+	if IsGameStateWon(1, tiles[6], tiles[7], tiles[10], tiles[11]) then
+		
 	end
 end
 

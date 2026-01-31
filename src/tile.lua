@@ -3,7 +3,7 @@ local gfx = pd.graphics
 
 class("Tile").extends(gfx.sprite)
 
-function Tile:init(x, y, tileWidth, img)
+function Tile:init(x, y, tileWidth, img, id)
 	self:moveTo(x, y)
 
 	self.normalImage = img
@@ -15,7 +15,7 @@ function Tile:init(x, y, tileWidth, img)
 	gfx.popContext()
 
 	self:setImage(self.normalImage)
-
+	self.id = id
 	self.homeX = x
 	self.homeY = y
 end

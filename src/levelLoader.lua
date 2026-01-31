@@ -38,10 +38,10 @@ local level1 =
     bg = "images/bgs/party",
     winState = 
     {
-        "face1",
-        "face2",
-        "face3",
-        "face4"
+        "images/dissapointed/LT",
+        "images/dissapointed/RT",
+        "images/dissapointed/LB",
+        "images/dissapointed/RB"
     },
     tiles = 
     {
@@ -82,6 +82,10 @@ function GetTileImages(levelNum)
     return tiles
 end
 
+function GetTileIds(levelNum)
+    return getLevel(levelNum).tiles
+end
+
 local bgSprite
 local function setBg(levelNum)
     local image = gfx.image.new(getLevel(levelNum).bg)
@@ -104,4 +108,13 @@ end
 function SetLevelData(levelNum)
     setBg(levelNum)
     setLevelText(levelNum)
+end
+
+function IsGameStateWon(levelNum, LT, RT, LB, RB)
+    local winningIds = getLevel(levelNum).winState
+    if winningIds[1] == LT.id and winningIds[2] == RT.id and winningIds[3] == LB.id and winningIds[4] == RB.id then
+        print("YIPPEEE")
+        return true
+    end
+    return false
 end
