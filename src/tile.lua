@@ -1,14 +1,15 @@
-local pd <const> = playdate
-local gfx <const> = pd.graphics
+local pd = playdate
+local gfx = pd.graphics
 
-class('Tile').extends(gfx.sprite)
+class("Tile").extends(gfx.sprite)
 
 function Tile:init(x, y, tileWidth, img)
-    gfx.pushContext(img)
-    self:moveTo(x,y)
-    self:setImage(img)
+	gfx.pushContext(img)
+	self:moveTo(x, y)
+	self:setImage(img)
 end
 
 function Tile:update()
-    Tile.super.update(self)
-end 
+	Tile.super.update(self)
+end
+

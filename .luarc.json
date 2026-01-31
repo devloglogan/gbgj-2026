@@ -1,0 +1,10 @@
+{
+  "diagnostics": {
+    "globals": [
+      "playdate",
+      "import",
+      "class",
+      "Tile"
+    ]
+  }
+}
