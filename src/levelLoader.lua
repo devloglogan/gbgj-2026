@@ -1,9 +1,15 @@
+
+import("audioManager")
+
+
 local pd = playdate
 local gfx = playdate.graphics
+
 local levelX = 
 {
     text = "This is the line of dialogue",
     bg = "images/bg1",
+    music = "audio/FaceSwap_Song1",
     winState = 
     {
         "face1",
@@ -34,8 +40,9 @@ local levelX =
 
 local level1 = 
 {
-    text = "This is the line of dialogue",
+    text = "This is a dissapointing comment",
     bg = "images/bgs/party",
+    music = "audio/FaceSwap_Song1",
     winState = 
     {
         "images/dissapointed/LT",
@@ -105,9 +112,15 @@ local function setLevelText(levelNum)
     SetTopText(text)
 end
 
+local function playAudio(levelNum)
+    local level = getLevel(levelNum)
+    PlayAudio(level.music)
+end
+
 function SetLevelData(levelNum)
     setBg(levelNum)
     setLevelText(levelNum)
+    playAudio(levelNum)
 end
 
 function IsGameStateWon(levelNum, LT, RT, LB, RB)
