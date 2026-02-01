@@ -1,4 +1,6 @@
 import("CoreLibs/graphics")
+import("CoreLibs/math")
+import("CoreLibs/timer")
 import("CoreLibs/ui")
 import("CoreLibs/sprites.lua")
 import("CoreLibs/object.lua")
@@ -37,6 +39,7 @@ initClassTiles()
 local row = 0
 local column = 0
 local isVertical = false
+local acceptCrankInput = true
 
 local mirroredStartTile = Tile(0, 0, tileWidth, tiles[1]:getImage())
 mirroredStartTile:add()
@@ -195,18 +198,6 @@ function pd.update()
 		tilesToMove[i]:lighten()
 	end
 
-	-- Move tiles on crank change
-	local crankChange = pd.getCrankChange()
-	for i = 1, 6 do
-		x, y = tilesToMove[i]:getPosition()
-		if not isVertical then
-			x += crankChange / 4
-		else
-			y += crankChange / 4
-		end
-		tilesToMove[i]:moveTo(x, y)
-	end
-
 	-- Update mirrored tiles on changed row/column
 	local extraTilesDirty = pd.buttonJustPressed(pd.kButtonDown)
 		or pd.buttonJustPressed(pd.kButtonUp)
@@ -220,7 +211,30 @@ function pd.update()
 		end
 
 		for i = 1, 16 do
-			tiles[i]:moveTo(tiles[i].homeX, tiles[i].homeY)
+			local t = tiles[i]
+			local tx, ty = t:getPosition()
+			if tx ~= t.homeX or ty ~= t.homeY then
+				t:lerpToHome()
+			end
+		end
+
+		acceptCrankInput = false
+		pd.timer.performAfterDelay(200, function()
+			acceptCrankInput = true
+		end)
+	end
+
+	-- Move tiles on crank change
+	if acceptCrankInput then
+		local crankChange = pd.getCrankChange()
+		for i = 1, 6 do
+			x, y = tilesToMove[i]:getPosition()
+			if not isVertical then
+				x += crankChange / 4
+			else
+				y += crankChange / 4
+			end
+			tilesToMove[i]:moveTo(x, y)
 		end
 	end
 
@@ -249,9 +263,9 @@ function pd.update()
 		end
 	end
 	if IsGameStateWon(1, tiles[6], tiles[7], tiles[10], tiles[11]) then
-		
 	end
 end
 
 SetLevelData(1)
 DrawTopBar()
+

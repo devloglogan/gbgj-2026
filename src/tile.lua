@@ -18,10 +18,22 @@ function Tile:init(x, y, tileWidth, img, id)
 	self.id = id
 	self.homeX = x
 	self.homeY = y
+
+	self.isLerpingHome = false
 end
 
 function Tile:update()
 	Tile.super.update(self)
+
+	if self.isLerpingHome then
+		local x, y = self:getPosition()
+		self:moveTo(pd.math.lerp(x, self.homeX, 0.3), pd.math.lerp(y, self.homeY, 0.3))
+		x, y = self:getPosition()
+		if ((x - self.homeX) < 2 and (x - self.homeX) > -2) and ((y - self.homeY) < 2 and (y - self.homeY) > -2) then
+			self:moveTo(self.homeX, self.homeY)
+			self.isLerpingHome = false
+		end
+	end
 end
 
 function Tile:lighten()
@@ -30,4 +42,8 @@ end
 
 function Tile:darken()
 	self:setImage(self.darkImage)
+end
+
+function Tile:lerpToHome()
+	self.isLerpingHome = true
 end
