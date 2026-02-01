@@ -2,7 +2,7 @@ local pd = playdate
 local gfx = pd.graphics
 
 local timeWipeIn = 1000
-local timeHold = 1000
+local timeHold = 500
 local timeWipeOut = 1000
 
 local function moveCallback(startPos, endPos, duration, easing, sprite)

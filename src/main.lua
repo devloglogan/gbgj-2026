@@ -86,6 +86,7 @@ local function deinitTiles()
 end
 
 local function updateAxis(isCurrentVertical, isTargetVertical, delta)
+	PlayDpad()
 	if isCurrentVertical == isTargetVertical then
 		return isTargetVertical, delta
 	else
@@ -257,6 +258,12 @@ function pd.update()
 				y += crankChange / 4
 			end
 			tilesToMove[i]:moveTo(x, y)
+		end
+		if crankChange ~= 0 then
+			if crankChange < 0 then
+				crankChange = -1 * crankChange
+			end
+			PlayCrank(crankChange)
 		end
 	end
 

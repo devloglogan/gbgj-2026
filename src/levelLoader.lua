@@ -138,7 +138,7 @@ end
 
 local function playAudio(levelNum)
 	local level = getLevel(levelNum)
-	PlayAudio(level.music)
+	PlayMusic(level.music)
 end
 
 function SetLevelData(levelNum)
