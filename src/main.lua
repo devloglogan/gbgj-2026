@@ -16,8 +16,10 @@ local gfx = playdate.graphics
 
 local tileWidth = 75
 
-local tileImages = GetTileImages(1)
-local tileIds = GetTileIds(1)
+local currentLevel = 1
+
+local tileImages = GetTileImages(currentLevel)
+local tileIds = GetTileIds(currentLevel)
 
 local tiles = {}
 local function initClassTiles()
@@ -266,9 +268,10 @@ function pd.update()
 	end
 	if IsGameStateWon(1, tiles[6], tiles[7], tiles[10], tiles[11]) then
 		PlayWinAnimation(tileWidth)
+		currentLevel = currentLevel + 1
 	end
 end
 
-SetLevelData(1)
+SetLevelData(currentLevel)
 DrawTopBar()
 
