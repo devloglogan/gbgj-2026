@@ -6,7 +6,6 @@ local gfx = playdate.graphics
 
 class("Comic").extends(gfx.sprite)
 
-local SCREEN_WIDTH = pd.display.getWidth()
 local SCREEN_HEIGHT = pd.display.getHeight()
 
 function Comic:init(imagePath)
@@ -19,21 +18,20 @@ function Comic:init(imagePath)
 	end
 
 	self.imageWidth, self.imageHeight = self.comicImage:getSize()
-	self.scrollOffset = 0
-
-	-- Create a screen-sized image for drawing the visible portion
-	self.displayImage = gfx.image.new(SCREEN_WIDTH, SCREEN_HEIGHT)
+	self.isLocked = false
 
 	self:setImage(self.comicImage)
 	self:moveTo(self.imageWidth / 2, self.imageHeight / 2)
 	self:setZIndex(20)
 	self:add()
-
-	print("Comic added")
 end
 
 function Comic:update()
 	Comic.super.update(self)
+
+	if self.isLocked then
+		return
+	end
 
 	local crankChange = pd.getCrankChange()
 	if crankChange ~= 0 then
@@ -59,4 +57,8 @@ function Comic:isAtBottom()
 	local max = (-self.imageHeight / 2) + SCREEN_HEIGHT
 	local _, y = self:getPosition()
 	return y < (max + 10)
+end
+
+function Comic:lock()
+	self.isLocked = true
 end

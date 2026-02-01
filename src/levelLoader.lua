@@ -146,10 +146,11 @@ end
 
 function SetLevelData(levelNum)
 	if levelNum == 0 then
-		comic = Comic("images/wipe_vertical_huge_01.png")
+		comic = Comic("images/comics/IntroComic_v1.png")
 		return
 	elseif levelNum == 1 then
 		comic:remove()
+		comic = nil
 	end
 
 	print("LEVEL NUM ", levelNum)
@@ -160,7 +161,12 @@ end
 
 function IsGameStateWon(levelNum, LT, RT, LB, RB)
 	if comic ~= nil then
-		return comic:isAtBottom() and pd.buttonJustPressed(pd.kButtonA)
+		if comic:isAtBottom() and pd.buttonJustPressed(pd.kButtonA) then
+			comic:lock()
+			return true
+		else
+			return false
+		end
 	end
 
 	local winningIds = getLevel(levelNum).winState

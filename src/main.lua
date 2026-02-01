@@ -190,14 +190,24 @@ local function checkWin()
 		checkAndLerpTiles()
 		acceptCrankInput = false
 
-		pd.timer.performAfterDelay(PlayWinAnimation(tileWidth), function()
+		-- Don't perform win animation on transition to level 1
+		if currentLevel ~= 1 then
+			pd.timer.performAfterDelay(PlayWinAnimation(tileWidth), function()
+				pd.timer.performAfterDelay(ScreenWipe(), function()
+					SetLevelData(currentLevel)
+					deinitTiles()
+					initClassTiles()
+					acceptCrankInput = true
+				end)
+			end)
+		else
 			pd.timer.performAfterDelay(ScreenWipe(), function()
 				SetLevelData(currentLevel)
 				deinitTiles()
 				initClassTiles()
 				acceptCrankInput = true
 			end)
-		end)
+		end
 	end
 end
 
