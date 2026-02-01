@@ -7,9 +7,13 @@ local dpad = sfx.sampleplayer.new("audio/Dpad_Sound_01")
 local crank1 = sfx.sampleplayer.new("audio/CrankSound_01")
 local crank2 = sfx.sampleplayer.new("audio/CrankSound_02")
 local win = sfx.sampleplayer.new("audio/WinSound_01")
-
+local currentAudio = ""
 --Immediately stops previous audio and plays the new audio 
 function PlayMusic(path)
+    if path == currentAudio then
+        return
+    end
+    currentAudio = path
     if music:isPlaying() then 
         music:stop()
     end

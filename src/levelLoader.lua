@@ -37,70 +37,163 @@ local levelX = {
 }
 
 local level1 = {
-	text = "This is a dissapointing comment",
+	text = "You just got an invite for a 15-minute meeting with HR first thing tomorrow morning.",
 	bg = "images/bgs/party",
 	music = "audio/FaceSwap_Song1",
 	winState = {
-		"images/dissapointed/LT",
-		"images/dissapointed/RT",
-		"images/dissapointed/LB",
-		"images/dissapointed/RB",
+		"images/worried/LT",
+		"images/worried/RT",
+		"images/worried/LB",
+		"images/worried/RB",
 	},
 	tiles = {
-		"images/dissapointed/LB",
-		"images/dissapointed/LT",
-		"images/dissapointed/RB",
-		"images/dissapointed/RT",
-		"images/dissapointed/LB",
-		"images/dissapointed/LT",
-		"images/dissapointed/RB",
-		"images/dissapointed/RT",
-		"images/dissapointed/LB",
-		"images/dissapointed/LT",
-		"images/dissapointed/RB",
-		"images/dissapointed/RT",
-		"images/dissapointed/LB",
-		"images/dissapointed/LT",
-		"images/dissapointed/RB",
-		"images/dissapointed/RT",
+		"images/content/LB",
+		"images/worried/RB",
+		"images/content/RT",
+		"images/worried/LT",
+		"images/worried/RB",
+		"images/worried/LB",
+		"images/happy/RB",
+		"images/content/LB",
+		"images/worried/LB",
+		"images/doubtful/LT",
+		"images/worried/LT",
+		"images/worried/RT",
+		"images/surprised/RB",
+		"images/worried/RT",
+		"images/happy/RT",
+		"images/surprised/LT",
+
 	},
 }
 
 local level2 = {
-	text = "This is a super content comment",
+	text = "You crush asked you out on your birthday!",
 	bg = "images/bgs/party",
 	music = "audio/FaceSwap_Song1",
 	winState = {
-		"images/content/LT",
-		"images/content/RT",
-		"images/content/LB",
-		"images/content/RB",
+		"images/happy/LT",
+		"images/happy/RT",
+		"images/happy/LB",
+		"images/happy/RB",
 	},
 	tiles = {
-		"images/content/LB",
+		"images/happy/RB",
+		"images/happy/LB",
+		"images/dissapointed/LB",
 		"images/content/LT",
+		"images/content/LB",
+		"images/happy/LT",
+		"images/surprised/RT",
+		"images/doubtful/RT",
+		"images/happy/LB",
+		"images/worried/RB",
+		"images/worried/LT",
+		"images/happy/RB",
+		"images/doubtful/RB",
+		"images/happy/RT",
+		"images/dissapointed/RT",
+		"images/happy/LT",
+
+	},
+}
+
+local level3 = {
+	text = "AI will create a more compassionate world.",
+	bg = "images/bgs/party",
+	music = "audio/FaceSwap_Song1",
+	winState = {
+		"images/doubtful/LT",
+		"images/doubtful/RT",
+		"images/doubtful/LB",
+		"images/doubtful/RB",
+	},
+	tiles = {
+		"images/surprised/RT",
+		"images/happy/LB",
+		"images/surprised/LT",
+		"images/doubtful/LB",
+		"images/dissapointed/RB",
+		"images/doubtful/RT",
+		"images/doubtful/LT",
+		"images/doubtful/LB",
+		"images/doubtful/LT",
+		"images/doubtful/RB",
+		"images/happy/RB",
+		"images/content/RT",
+		"images/content/RB",
+		"images/surprised/LT",
+		"images/worried/RT",
+		"images/happy/LB",
+
+	},
+}
+
+local level4 = {
+	text = "Your lazy roommate finally cleaned the dishes on their own.",
+	bg = "images/bgs/party",
+	music = "audio/FaceSwap_Song1",
+	winState = {
+		"images/surprised/LT",
+		"images/surprised/RT",
+		"images/surprised/LB",
+		"images/surprised/RB",
+	},
+	tiles = {
+		"images/dissapointed/LT",
+		"images/surprised/LT",
+		"images/content/RT",
+		"images/happy/RB",
+		"images/doubtful/LB",
+		"images/content/RT",
+		"images/worried/RB",
+		"images/dissapointed/RB",
+		"images/surprised/RT",
+		"images/worried/LT",
+		"images/surprised/LB",
+		"images/surprised/RB",
+		"images/doubtful/RT",
+		"images/dissapointed/LT",
+		"images/surprised/LB",
+		"images/content/LB",
+	},
+}
+local level5 = {
+	text = "Your waiter dropped your avacado toast... face-down.",
+	bg = "images/bgs/party",
+	music = "audio/FaceSwap_Song1",
+	winState = {
+		"images/dissapointed/LT",
+		"images/dissapointed/RT",
+		"images/dissapointed/LB",
+		"images/dissapointed/RB",
+	},
+	tiles = {
+		"images/happy/RB",
+		"images/content/LB",
+		"images/content/RB",
+		"images/dissapointed/LB",
+		"images/dissapointed/LT",
+		"images/happy/RT",
+		"images/surprised/LT",
+		"images/happy/LT",
+		"images/dissapointed/RB",
+		"images/dissapointed/RT",
+		"images/surprised/LT",
+		"images/doubtful/RT",
 		"images/content/RB",
 		"images/content/RT",
-		"images/content/LB",
-		"images/content/LT",
-		"images/content/RB",
 		"images/content/RT",
-		"images/content/LB",
-		"images/content/LT",
-		"images/content/RB",
-		"images/content/RT",
-		"images/content/LB",
-		"images/content/LT",
-		"images/content/RB",
-		"images/content/RT",
+		"images/surprised/LB",
 	},
 }
 
 local function getLevel(levelNum)
-	if levelNum == 1 then
-		return level1
-	elseif levelNum == 2 then
-		return level2
+	if levelNum == 1 then return level1
+	elseif levelNum == 2 then return level2
+	elseif levelNum == 3 then return level3
+	elseif levelNum == 4 then return level4
+	elseif levelNum == 5 then return level5
 	end
 end
 

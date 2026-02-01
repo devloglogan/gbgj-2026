@@ -40,7 +40,6 @@ function PlayWinAnimation(offset)
         {-offset    , -offset   }
     }
     for i = 1, 8 do
-        print(i)
         local delay = (i-1) * interval
 	    local p = Particle
         (
@@ -70,7 +69,7 @@ function PlayWinAnimation(offset)
             pd.easingFunctions.inElastic,
             offset * 3,
             pd.easingFunctions.linear,
-            8
+            4
         )
     end
     return totalDuration * 1000

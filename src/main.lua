@@ -185,7 +185,8 @@ local function checkAndLerpTiles()
 end
 
 local function checkWin()
-	if IsGameStateWon(currentLevel, tiles[6], tiles[7], tiles[10], tiles[11]) then
+	if IsGameStateWon(currentLevel, tiles[6], tiles[7], tiles[10], tiles[11]) or 
+	pd.buttonJustPressed(pd.kButtonA) then
 		currentLevel = currentLevel + 1
 		checkAndLerpTiles()
 		acceptCrankInput = false

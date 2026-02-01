@@ -1,6 +1,6 @@
-name=Game
-author=
-description=
-bundleID=
+name=Face Swap
+author=Crank Forward Inc.
+description=Move tiles to make your human mask give the correct emotional response. 
+bundleID=com.crank.maskJam
 version=1.0.0
 buildNumber=1
