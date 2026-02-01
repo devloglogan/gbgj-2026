@@ -9,6 +9,8 @@ import("tile")
 import("levelLoader")
 import("topBar")
 
+import("particleManager")
+
 local pd = playdate
 local gfx = playdate.graphics
 
@@ -263,6 +265,7 @@ function pd.update()
 		end
 	end
 	if IsGameStateWon(1, tiles[6], tiles[7], tiles[10], tiles[11]) then
+		PlayWinAnimation(tileWidth)
 	end
 end
 
