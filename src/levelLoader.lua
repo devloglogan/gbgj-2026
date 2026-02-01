@@ -1,7 +1,10 @@
 import("audioManager")
+import("comic")
 
 local pd = playdate
 local gfx = playdate.graphics
+
+local comic
 
 local levelX = {
 	text = "This is the line of dialogue",
@@ -142,6 +145,13 @@ local function playAudio(levelNum)
 end
 
 function SetLevelData(levelNum)
+	if levelNum == 0 then
+		comic = Comic("images/wipe_vertical_huge_01.png")
+		return
+	elseif levelNum == 1 then
+		comic:remove()
+	end
+
 	print("LEVEL NUM ", levelNum)
 	setBg(levelNum)
 	setLevelText(levelNum)
@@ -149,9 +159,12 @@ function SetLevelData(levelNum)
 end
 
 function IsGameStateWon(levelNum, LT, RT, LB, RB)
+	if comic ~= nil then
+		return comic:isAtBottom() and pd.buttonJustPressed(pd.kButtonA)
+	end
+
 	local winningIds = getLevel(levelNum).winState
-	if winningIds[1] == LT.id and winningIds[2] == RT.id 
-    and winningIds[3] == LB.id and winningIds[4] == RB.id then
+	if winningIds[1] == LT.id and winningIds[2] == RT.id and winningIds[3] == LB.id and winningIds[4] == RB.id then
 		PlayWinSFX()
 		return true
 	end

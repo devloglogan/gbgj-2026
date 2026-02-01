@@ -11,14 +11,12 @@ import("topBar")
 import("particleManager")
 import("screenWipe")
 
-
 local pd = playdate
 local gfx = playdate.graphics
 
-local hasWon = false
 local tileWidth = 75
 
-local currentLevel = 1
+local currentLevel = 0
 
 local row = 1
 local column = 1
@@ -75,10 +73,12 @@ local function initClassTiles()
 	updateMirroredTiles(tiles[5], tiles[8])
 end
 
-initClassTiles()
-
 local function deinitTiles()
 	for i = 1, 16 do
+		local t = tiles[i]
+		if t == nil then
+			return
+		end
 		tiles[i]:remove()
 	end
 	mirroredStartTile:remove()
@@ -174,10 +174,30 @@ end
 local function checkAndLerpTiles()
 	for i = 1, 16 do
 		local t = tiles[i]
+		if t == nil then
+			return
+		end
 		local tx, ty = t:getPosition()
 		if tx ~= t.homeX or ty ~= t.homeY then
 			t:lerpToHome()
 		end
+	end
+end
+
+local function checkWin()
+	if IsGameStateWon(currentLevel, tiles[6], tiles[7], tiles[10], tiles[11]) then
+		currentLevel = currentLevel + 1
+		checkAndLerpTiles()
+		acceptCrankInput = false
+
+		pd.timer.performAfterDelay(PlayWinAnimation(tileWidth), function()
+			pd.timer.performAfterDelay(ScreenWipe(), function()
+				SetLevelData(currentLevel)
+				deinitTiles()
+				initClassTiles()
+				acceptCrankInput = true
+			end)
+		end)
 	end
 end
 
@@ -186,6 +206,13 @@ function pd.update()
 
 	gfx.sprite.update()
 	pd.timer.updateTimers()
+
+	if currentLevel == 0 then
+		checkWin()
+		return
+	elseif tiles[1] == nil then
+		return
+	end
 
 	-- Determine row/column
 	local delta
@@ -292,20 +319,7 @@ function pd.update()
 		end
 	end
 
-	if IsGameStateWon(currentLevel, tiles[6], tiles[7], tiles[10], tiles[11]) then
-		currentLevel = currentLevel + 1
-		checkAndLerpTiles()
-		acceptCrankInput = false
-
-		pd.timer.performAfterDelay(PlayWinAnimation(tileWidth), function()
-			pd.timer.performAfterDelay(ScreenWipe(), function()
-				SetLevelData(currentLevel)
-				deinitTiles()
-				initClassTiles()
-				acceptCrankInput = true
-			end)
-		end)
-	end
+	checkWin()
 end
 
 SetLevelData(currentLevel)
