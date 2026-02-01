@@ -150,8 +150,8 @@ end
 
 function IsGameStateWon(levelNum, LT, RT, LB, RB)
 	local winningIds = getLevel(levelNum).winState
-	if winningIds[1] == LT.id and winningIds[2] == RT.id and winningIds[3] == LB.id and winningIds[4] == RB.id then
-		print("YIPPEEE")
+	if winningIds[1] == LT.id and winningIds[2] == RT.id 
+    and winningIds[3] == LB.id and winningIds[4] == RB.id then
 		return true
 	end
 	return false

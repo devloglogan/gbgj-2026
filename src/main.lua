@@ -8,8 +8,9 @@ import("CoreLibs/object.lua")
 import("tile")
 import("levelLoader")
 import("topBar")
-
 import("particleManager")
+import("screenWipe")
+
 
 local pd = playdate
 local gfx = playdate.graphics
@@ -289,12 +290,13 @@ function pd.update()
 		checkAndLerpTiles()
 		acceptCrankInput = false
 
-		PlayWinAnimation(tileWidth)
-		pd.timer.performAfterDelay(2000, function()
-			SetLevelData(currentLevel)
-			deinitTiles()
-			initClassTiles()
-			acceptCrankInput = true
+		pd.timer.performAfterDelay(PlayWinAnimation(tileWidth), function()
+			pd.timer.performAfterDelay(ScreenWipe(), function()
+				SetLevelData(currentLevel)
+				deinitTiles()
+				initClassTiles()
+				acceptCrankInput = true
+			end)
 		end)
 	end
 end

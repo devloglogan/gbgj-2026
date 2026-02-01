@@ -42,5 +42,6 @@ function PlayWinAnimation(offset)
                 5, 
                 pd.easingFunctions.outElastic
             )
+            return totalDuration * 1000
         end
 end
