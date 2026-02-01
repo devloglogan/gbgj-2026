@@ -45,3 +45,10 @@ function Particle:move(startPos, endPos, delay, duration, easing)
     pd.timer.new(delay * 1000, moveCallback, startPos, endPos, duration, easing, self)
 end
 
+function Particle:moveDir(dirX, dirY, distance, delay, duration, easing)
+    local startX, startY = self:getPosition()
+    local dir = pd.geometry.vector2D.new(dirX, dirY)
+    dir:normalize()
+    dir:scale(distance)
+    pd.timer.new(delay * 1000, moveCallback, {startX, startY}, {startX + dir.dx, startY + dir.dy}, duration, easing, self)
+end
