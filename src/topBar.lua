@@ -14,23 +14,22 @@ for x = 0, pd.display.getWidth() - 1 do
 		gfx.drawPixel(x, y)
 	end
 end
-gfx.popContext();
-
+gfx.popContext()
 
 local topBar = gfx.sprite.new(img)
-topBar:moveTo(pd.display.getWidth()/2, barHeight/2)
+topBar:setZIndex(10)
+topBar:moveTo(pd.display.getWidth() / 2, barHeight / 2)
 
 local displayText = ScrollText(txt)
-local displayTextWrap = ScrollText (txt, true)
+local displayTextWrap = ScrollText(txt, true)
 
 function DrawTopBar()
-    topBar:add()
-    displayText:add()
-    displayTextWrap:add()
+	topBar:add()
+	displayText:add()
+	displayTextWrap:add()
 end
 
 function SetTopText(text)
-    displayText:updateText(text)
-    displayTextWrap:updateText(text)
+	displayText:updateText(text)
+	displayTextWrap:updateText(text)
 end
-

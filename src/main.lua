@@ -14,41 +14,18 @@ import("particleManager")
 local pd = playdate
 local gfx = playdate.graphics
 
+local hasWon = false
 local tileWidth = 75
 
 local currentLevel = 1
 
-local tileImages = GetTileImages(currentLevel)
-local tileIds = GetTileIds(currentLevel)
-
-local tiles = {}
-local function initClassTiles()
-	for i = 0, 3 do
-		for j = 0, 3 do
-			local index = j * 4 + i + 1
-			tiles[index] = Tile(
-				50 + (tileWidth / 2) + (i * tileWidth),
-				-15 + (j * tileWidth) + (tileWidth / 2),
-				tileWidth,
-				tileImages[index],
-				tileIds[index]
-			)
-			tiles[index]:add()
-		end
-	end
-end
-
-initClassTiles()
-
-local row = 0
-local column = 0
+local row = 1
+local column = 1
 local isVertical = false
 local acceptCrankInput = true
 
-local mirroredStartTile = Tile(0, 0, tileWidth, tiles[1]:getImage())
-mirroredStartTile:add()
-local mirroredEndTile = Tile(0, 0, tileWidth, tiles[1]:getImage())
-mirroredEndTile:add()
+local tiles = {}
+local mirroredStartTile, mirroredEndTile
 
 local function updateMirroredTiles(startTile, endTile)
 	mirroredEndTile:setImage(endTile:getImage())
@@ -69,7 +46,43 @@ local function updateMirroredTiles(startTile, endTile)
 	mirroredStartTile:moveTo(x, y)
 end
 
-updateMirroredTiles(tiles[1], tiles[4])
+local function initClassTiles()
+	local tileImages = GetTileImages(currentLevel)
+	local tileIds = GetTileIds(currentLevel)
+
+	row = 1
+	column = 1
+
+	for i = 0, 3 do
+		for j = 0, 3 do
+			local index = j * 4 + i + 1
+			tiles[index] = Tile(
+				50 + (tileWidth / 2) + (i * tileWidth),
+				-15 + (j * tileWidth) + (tileWidth / 2),
+				tileWidth,
+				tileImages[index],
+				tileIds[index]
+			)
+			tiles[index]:add()
+		end
+	end
+
+	mirroredStartTile = Tile(0, 0, tileWidth, tiles[1]:getImage())
+	mirroredStartTile:add()
+	mirroredEndTile = Tile(0, 0, tileWidth, tiles[1]:getImage())
+	mirroredEndTile:add()
+	updateMirroredTiles(tiles[5], tiles[8])
+end
+
+initClassTiles()
+
+local function deinitTiles()
+	for i = 1, 16 do
+		tiles[i]:remove()
+	end
+	mirroredStartTile:remove()
+	mirroredEndTile:remove()
+end
 
 local function updateAxis(isCurrentVertical, isTargetVertical, delta)
 	if isCurrentVertical == isTargetVertical then
@@ -156,6 +169,16 @@ local function rearrangeColumn(colIndex, direction)
 	wrapTile:moveTo(wrapTile.homeX, wrapTile.homeY + offset - (direction * tileWidth))
 end
 
+local function checkAndLerpTiles()
+	for i = 1, 16 do
+		local t = tiles[i]
+		local tx, ty = t:getPosition()
+		if tx ~= t.homeX or ty ~= t.homeY then
+			t:lerpToHome()
+		end
+	end
+end
+
 function pd.update()
 	-- gfx.clear()
 
@@ -214,13 +237,7 @@ function pd.update()
 			updateMirroredTiles(tiles[1 + (row * 4)], tiles[4 + (row * 4)])
 		end
 
-		for i = 1, 16 do
-			local t = tiles[i]
-			local tx, ty = t:getPosition()
-			if tx ~= t.homeX or ty ~= t.homeY then
-				t:lerpToHome()
-			end
-		end
+		checkAndLerpTiles()
 
 		acceptCrankInput = false
 		pd.timer.performAfterDelay(200, function()
@@ -266,12 +283,21 @@ function pd.update()
 			updateMirroredTiles(tiles[1 + column], tiles[1 + column + 12])
 		end
 	end
-	if IsGameStateWon(1, tiles[6], tiles[7], tiles[10], tiles[11]) then
-		PlayWinAnimation(tileWidth)
+
+	if IsGameStateWon(currentLevel, tiles[6], tiles[7], tiles[10], tiles[11]) then
 		currentLevel = currentLevel + 1
+		checkAndLerpTiles()
+		acceptCrankInput = false
+
+		PlayWinAnimation(tileWidth)
+		pd.timer.performAfterDelay(2000, function()
+			SetLevelData(currentLevel)
+			deinitTiles()
+			initClassTiles()
+			acceptCrankInput = true
+		end)
 	end
 end
 
 SetLevelData(currentLevel)
 DrawTopBar()
-

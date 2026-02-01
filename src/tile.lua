@@ -4,6 +4,7 @@ local gfx = pd.graphics
 class("Tile").extends(gfx.sprite)
 
 function Tile:init(x, y, tileWidth, img, id)
+	self:setZIndex(0)
 	self:moveTo(x, y)
 
 	self.normalImage = img
