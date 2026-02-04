@@ -1,6 +1,7 @@
-name=Face Swap
+name=Blorb Blends In
 author=Crank Forward Inc.
-description=Move tiles to make your human mask give the correct emotional response. 
+description=Blorb, an alien from the outer worlds, desperately wants to fit in and be with the humans. 
 bundleID=com.crank.maskJam
 version=1.0.0
 buildNumber=1
+imagePath=meta

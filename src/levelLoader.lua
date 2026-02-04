@@ -38,7 +38,8 @@ local levelX = {
 
 local level1 = {
 	text = "You just got an invite for a 15-minute meeting with HR first thing tomorrow morning.",
-	bg = "images/bgs/party",
+	bg1 = "images/bgs/background_party_01",
+	bg2 = "images/bgs/background_party_02",
 	music = "audio/FaceSwap_Song1",
 	winState = {
 		"images/worried/LT",
@@ -69,7 +70,8 @@ local level1 = {
 
 local level2 = {
 	text = "You crush asked you out on your birthday!",
-	bg = "images/bgs/party",
+	bg1 = "images/bgs/background_party_01",
+	bg2 = "images/bgs/background_party_02",
 	music = "audio/FaceSwap_Song1",
 	winState = {
 		"images/happy/LT",
@@ -98,9 +100,10 @@ local level2 = {
 	},
 }
 
-local level3 = {
+local level5 = {
 	text = "AI will create a more compassionate world.",
-	bg = "images/bgs/party",
+	bg1 = "images/bgs/background_party_01",
+	bg2 = "images/bgs/background_party_02",
 	music = "audio/FaceSwap_Song1",
 	winState = {
 		"images/doubtful/LT",
@@ -113,15 +116,15 @@ local level3 = {
 		"images/happy/LB",
 		"images/surprised/LT",
 		"images/doubtful/LB",
+		"images/doubtful/LB",
 		"images/dissapointed/RB",
 		"images/doubtful/RT",
-		"images/doubtful/LT",
-		"images/doubtful/LB",
 		"images/doubtful/LT",
 		"images/doubtful/RB",
 		"images/happy/RB",
 		"images/content/RT",
 		"images/content/RB",
+		"images/doubtful/LT",
 		"images/surprised/LT",
 		"images/worried/RT",
 		"images/happy/LB",
@@ -131,7 +134,8 @@ local level3 = {
 
 local level4 = {
 	text = "Your lazy roommate finally cleaned the dishes on their own.",
-	bg = "images/bgs/party",
+	bg1 = "images/bgs/background_party_01",
+	bg2 = "images/bgs/background_party_02",
 	music = "audio/FaceSwap_Song1",
 	winState = {
 		"images/surprised/LT",
@@ -140,6 +144,7 @@ local level4 = {
 		"images/surprised/RB",
 	},
 	tiles = {
+		"images/surprised/RB",
 		"images/dissapointed/LT",
 		"images/surprised/LT",
 		"images/content/RT",
@@ -151,16 +156,16 @@ local level4 = {
 		"images/surprised/RT",
 		"images/worried/LT",
 		"images/surprised/LB",
-		"images/surprised/RB",
 		"images/doubtful/RT",
 		"images/dissapointed/LT",
 		"images/surprised/LB",
 		"images/content/LB",
 	},
 }
-local level5 = {
+local level3 = {
 	text = "Your waiter dropped your avacado toast... face-down.",
-	bg = "images/bgs/party",
+	bg1 = "images/bgs/background_party_01",
+	bg2 = "images/bgs/background_party_02",
 	music = "audio/FaceSwap_Song1",
 	winState = {
 		"images/dissapointed/LT",
@@ -213,16 +218,34 @@ function GetTileIds(levelNum)
 end
 
 local bgSprite
-local function setBg(levelNum)
-	local image = gfx.image.new(getLevel(levelNum).bg)
+local bgImage1
+local bgImage2
+local using1
+local swapTime = 500
 
+local function bgSwap()
+	if using1 then
+		bgSprite:setImage(bgImage1)
+	else
+		bgSprite:setImage(bgImage2)
+	end
+
+	using1 = not using1
+
+	pd.timer.performAfterDelay(swapTime, bgSwap)
+end
+
+
+local function setBg(levelNum)
+	bgImage1 = gfx.image.new(getLevel(levelNum).bg1)
+	bgImage2 = gfx.image.new(getLevel(levelNum).bg2)
+	
 	if bgSprite == nil then
-		bgSprite = gfx.sprite.new(image)
+		bgSprite = gfx.sprite.new(bgImage1)
 		bgSprite:moveTo(pd.display.getWidth() / 2, pd.display.getHeight() / 2)
 		bgSprite:setZIndex(5)
 		bgSprite:add()
-	else
-		bgSprite:setImage(image)
+		bgSwap()
 	end
 end
 
@@ -237,6 +260,16 @@ local function playAudio(levelNum)
 	PlayMusic(level.music)
 end
 
+
+local function ending()
+	local image = gfx.image.new("images/comics/EndPanel")
+	local sprite = gfx.sprite.new(image)
+	sprite:add()
+	sprite:moveTo(pd.display.getWidth()/2, pd.display.getHeight()/2)
+	sprite:setZIndex(19)
+end
+
+
 function SetLevelData(levelNum)
 	if levelNum == 0 then
 		comic = Comic("images/comics/IntroComic_v1.png")
@@ -244,6 +277,9 @@ function SetLevelData(levelNum)
 	elseif levelNum == 1 then
 		comic:remove()
 		comic = nil
+	elseif levelNum == 6 then
+		ending()
+		return
 	end
 
 	print("LEVEL NUM ", levelNum)
@@ -251,6 +287,8 @@ function SetLevelData(levelNum)
 	setLevelText(levelNum)
 	playAudio(levelNum)
 end
+
+
 
 function IsGameStateWon(levelNum, LT, RT, LB, RB)
 	if comic ~= nil then
@@ -260,6 +298,10 @@ function IsGameStateWon(levelNum, LT, RT, LB, RB)
 		else
 			return false
 		end
+	end
+
+	if levelNum > 5 then 
+		return false
 	end
 
 	local winningIds = getLevel(levelNum).winState

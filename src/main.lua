@@ -46,6 +46,8 @@ local function updateMirroredTiles(startTile, endTile)
 end
 
 local function initClassTiles()
+if currentLevel > 5 then return end
+
 	local tileImages = GetTileImages(currentLevel)
 	local tileIds = GetTileIds(currentLevel)
 
@@ -185,12 +187,13 @@ local function checkAndLerpTiles()
 end
 
 local function checkWin()
-	if IsGameStateWon(currentLevel, tiles[6], tiles[7], tiles[10], tiles[11]) or 
-	pd.buttonJustPressed(pd.kButtonA) then
+
+
+	if IsGameStateWon(currentLevel, tiles[6], tiles[7], tiles[10], tiles[11]) then
 		currentLevel = currentLevel + 1
 		checkAndLerpTiles()
 		acceptCrankInput = false
-
+		print("Test Level ", currentLevel)
 		-- Don't perform win animation on transition to level 1
 		if currentLevel ~= 1 then
 			pd.timer.performAfterDelay(PlayWinAnimation(tileWidth), function()
@@ -200,6 +203,11 @@ local function checkWin()
 					initClassTiles()
 					acceptCrankInput = true
 				end)
+			end)
+		elseif currentLevel == 6 then
+				pd.timer.performAfterDelay(ScreenWipe(), function()
+				SetLevelData(currentLevel)
+				deinitTiles()
 			end)
 		else
 			pd.timer.performAfterDelay(ScreenWipe(), function()
@@ -217,6 +225,12 @@ function pd.update()
 
 	gfx.sprite.update()
 	pd.timer.updateTimers()
+
+
+	if pd.isCrankDocked() then
+		pd.ui.crankIndicator:draw()
+	end
+
 
 	if currentLevel == 0 then
 		checkWin()
